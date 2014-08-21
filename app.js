@@ -1,5 +1,4 @@
 var express = require('express')
-  , config = require('./config/app')
   , app = express()
   , Fitbit = require('fitbit');
 
@@ -10,7 +9,7 @@ app.listen(3000);
 // OAuth flow
 app.get('/', function (req, res) {
   // Create an API client and start authentication via OAuth
-  var client = new Fitbit(config.CONSUMER_KEY, config.CONSUMER_SECRET);
+  var client = new Fitbit('44fde411b9fc4a79a20ad3f50c0961dd', 'a306186235724a2fb11d3c5fa82d6eed');
 
   client.getRequestToken(function (err, token, tokenSecret) {
     if (err) {
@@ -30,7 +29,7 @@ app.get('/', function (req, res) {
 app.get('/oauth_callback', function (req, res) {
   var verifier = req.query.oauth_verifier
     , oauthSettings = req.session.oauth
-    , client = new Fitbit(config.CONSUMER_KEY, config.CONSUMER_SECRET);
+    , client = new Fitbit('44fde411b9fc4a79a20ad3f50c0961dd', 'a306186235724a2fb11d3c5fa82d6eed');
 
   // Request an access token
   client.getAccessToken(
@@ -54,8 +53,8 @@ app.get('/oauth_callback', function (req, res) {
 // Display some stats
 app.get('/stats', function (req, res) {
   client = new Fitbit(
-      config.CONSUMER_KEY
-    , config.CONSUMER_SECRET
+      '44fde411b9fc4a79a20ad3f50c0961dd'
+    , 'a306186235724a2fb11d3c5fa82d6eed'
     , { // Now set with access tokens
           accessToken: req.session.oauth.accessToken
         , accessTokenSecret: req.session.oauth.accessTokenSecret
