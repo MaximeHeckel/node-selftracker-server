@@ -1,0 +1,11 @@
+{
+  "name": "StatusJS",
+  "main": "app.js",
+  "dependencies": {
+    "express": "<4.0",
+    "fitbit": "0.0.5"
+  },
+  "devDependencies": {
+    "supervisor": "latest"
+  }
+}
