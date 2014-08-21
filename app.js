@@ -45,13 +45,14 @@ app.get('/oauth_callback', function (req, res) {
         oauthSettings.accessToken = token;
         oauthSettings.accessTokenSecret = secret;
 
-        res.redirect('/stats');
+        res.redirect('/api');
       }
   );
 });
 
-// Display some stats
-app.get('/stats', function (req, res) {
+//Stats
+
+app.get('/api', function (req, res) {
   client = new Fitbit(
       '44fde411b9fc4a79a20ad3f50c0961dd'
     , 'a306186235724a2fb11d3c5fa82d6eed'
@@ -70,6 +71,6 @@ app.get('/stats', function (req, res) {
     }
 
     // `activities` is a Resource model
-    res.send('Total steps today: ' + activities.steps());
+    res.send(activities._attributes.summary);
   });
 });
