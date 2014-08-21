@@ -1,5 +1,6 @@
 var express = require('express')
   , app = express()
+  , jf = require('jsonfile')
   , Fitbit = require('fitbit');
 
 app.use(express.cookieParser());
@@ -45,24 +46,41 @@ app.get('/oauth_callback', function (req, res) {
         oauthSettings.accessToken = token;
         oauthSettings.accessTokenSecret = secret;
 
+        var cred = {
+          accessToken : token,
+          accessTokenSecret : secret
+        }
+
+        jf.writeFile('./token.json',cred, function(err){
+          if(err) console.log(err);
+        })
+
         res.redirect('/api');
       }
   );
 });
 
 //Stats
+function readToken(file, callback){
+    jf.readFile(file, function(err,obj){
+      if(err) callback(err);
+      callback(null,obj);
+    })
+}
 
 app.get('/api', function (req, res) {
+  readToken('./token.json',function(err,res){
   client = new Fitbit(
       '44fde411b9fc4a79a20ad3f50c0961dd'
     , 'a306186235724a2fb11d3c5fa82d6eed'
     , { // Now set with access tokens
-          accessToken: req.session.oauth.accessToken
-        , accessTokenSecret: req.session.oauth.accessTokenSecret
+           accessToken: res.accessToken
+        , accessTokenSecret: res.accessTokenSecret
         , unitMeasure: 'en_GB'
       }
-  );
 
+  );
+  });
   // Fetch todays activities
   client.getActivities(function (err, activities) {
     if (err) {

@@ -3,7 +3,9 @@
   "main": "app.js",
   "dependencies": {
     "express": "<4.0",
-    "fitbit": "0.0.5"
+    "fitbit": "0.0.5",
+    "redis": "^0.12.1",
+    "jsonfile": "^2.0.0"
   },
   "devDependencies": {
     "supervisor": "latest"
