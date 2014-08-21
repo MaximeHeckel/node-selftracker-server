@@ -55,7 +55,7 @@ app.get('/oauth_callback', function (req, res) {
           if(err) console.log(err);
         })
 
-        res.redirect('/api');
+        res.redirect('/working');
       }
   );
 });
@@ -68,27 +68,23 @@ function readToken(file, callback){
     })
 }
 
-app.get('/api', function (req, res) {
-  readToken('./token.json',function(err,res){
-  client = new Fitbit(
-      '44fde411b9fc4a79a20ad3f50c0961dd'
-    , 'a306186235724a2fb11d3c5fa82d6eed'
-    , { // Now set with access tokens
-           accessToken: res.accessToken
-        , accessTokenSecret: res.accessTokenSecret
-        , unitMeasure: 'en_GB'
-      }
+app.get('/working', function (req, res) {
+  res.send("App is working")
+});
 
-  );
-  });
-  // Fetch todays activities
-  client.getActivities(function (err, activities) {
-    if (err) {
-      // Take action
-      return;
+
+readToken('./token.json',function(err,res){
+var client = new Fitbit(
+    '44fde411b9fc4a79a20ad3f50c0961dd'
+  , 'a306186235724a2fb11d3c5fa82d6eed'
+  , { // Now set with access tokens
+         accessToken: res.accessToken
+      , accessTokenSecret: res.accessTokenSecret
+      , unitMeasure: 'en_GB'
     }
 
-    // `activities` is a Resource model
-    res.send(activities._attributes.summary);
+);
+  client.getActivities(function (err, activities) {
+    console.log(activities._attributes.summary);
   });
 });
