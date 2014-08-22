@@ -1,11 +1,16 @@
 var express = require('express')
   , app = express()
   , jf = require('jsonfile')
+  , mongoose = require('mongoose')
+  , port = process.env.PORT || 3000
+  , database = require('./config/database.js')
   , Fitbit = require('fitbit');
+
+mongoose.connect(database.url);
 
 app.use(express.cookieParser());
 app.use(express.session({secret: 'hekdhthigib'}));
-app.listen(3000);
+app.listen(port);
 
 // OAuth flow
 app.get('/', function (req, res) {

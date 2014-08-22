@@ -5,7 +5,8 @@
     "express": "<4.0",
     "fitbit": "0.0.5",
     "redis": "^0.12.1",
-    "jsonfile": "^2.0.0"
+    "jsonfile": "^2.0.0",
+    "mongoose": "^3.8.15"
   },
   "devDependencies": {
     "supervisor": "latest"
