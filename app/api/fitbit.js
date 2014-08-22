@@ -1,15 +1,14 @@
 var Fitbit = require('fitbit');
-var jf = require('jsonfile');
 
-module.exports = function(){
+module.exports = function(jf){
 
   function readToken(file, callback){
-      jf.readFile(file, function(err,obj){
-        if(err) callback(err);
-        callback(null,obj);
-      })
+        jf.readFile(file, function(err,obj){
+          if(err) callback(err);
+          callback(null,obj);
+        })
   }
-  
+
   readToken('./token.json',function(err,res){
   var client = new Fitbit(
       '44fde411b9fc4a79a20ad3f50c0961dd'

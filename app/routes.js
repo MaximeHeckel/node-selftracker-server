@@ -1,7 +1,6 @@
 var Fitbit = require('fitbit');
-var jf = require('jsonfile');
 
-module.exports = function(app){
+module.exports = function(app,jf){
   // OAuth flow
   app.get('/', function (req, res) {
     // Create an API client and start authentication via OAuth
@@ -58,6 +57,4 @@ module.exports = function(app){
   app.get('/app', function (req, res) {
     res.send("App is working")
   });
-
-  console.log('hello')
 }
