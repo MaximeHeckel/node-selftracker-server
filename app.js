@@ -1,69 +1,13 @@
 var express = require('express')
   , app = express()
   , jf = require('jsonfile')
-  , mongoose = require('mongoose')
-  , port = process.env.PORT || 3000
-  , database = require('./config/database.js')
   , Fitbit = require('fitbit');
-
-mongoose.connect(database.url);
 
 app.use(express.cookieParser());
 app.use(express.session({secret: 'hekdhthigib'}));
-app.listen(port);
+app.listen(3000);
 
-// OAuth flow
-app.get('/', function (req, res) {
-  // Create an API client and start authentication via OAuth
-  var client = new Fitbit('44fde411b9fc4a79a20ad3f50c0961dd', 'a306186235724a2fb11d3c5fa82d6eed');
-
-  client.getRequestToken(function (err, token, tokenSecret) {
-    if (err) {
-      // Take action
-      return;
-    }
-
-    req.session.oauth = {
-        requestToken: token
-      , requestTokenSecret: tokenSecret
-    };
-    res.redirect(client.authorizeUrl(token));
-  });
-});
-
-// On return from the authorization
-app.get('/oauth_callback', function (req, res) {
-  var verifier = req.query.oauth_verifier
-    , oauthSettings = req.session.oauth
-    , client = new Fitbit('44fde411b9fc4a79a20ad3f50c0961dd', 'a306186235724a2fb11d3c5fa82d6eed');
-
-  // Request an access token
-  client.getAccessToken(
-      oauthSettings.requestToken
-    , oauthSettings.requestTokenSecret
-    , verifier
-    , function (err, token, secret) {
-        if (err) {
-          // Take action
-          return;
-        }
-
-        oauthSettings.accessToken = token;
-        oauthSettings.accessTokenSecret = secret;
-
-        var cred = {
-          accessToken : token,
-          accessTokenSecret : secret
-        }
-
-        jf.writeFile('./token.json',cred, function(err){
-          if(err) console.log(err);
-        })
-
-        res.redirect('/working');
-      }
-  );
-});
+require('./app/routes.js')(app);
 
 //Stats
 function readToken(file, callback){
@@ -73,12 +17,7 @@ function readToken(file, callback){
     })
 }
 
-app.get('/working', function (req, res) {
-  res.send("App is working")
-});
-
-
-readToken('./token.json',function(err,res){
+/*readToken('./token.json',function(err,res){
 var client = new Fitbit(
     '44fde411b9fc4a79a20ad3f50c0961dd'
   , 'a306186235724a2fb11d3c5fa82d6eed'
@@ -90,6 +29,10 @@ var client = new Fitbit(
 
 );
   client.getActivities(function (err, activities) {
+    if (err) {
+      console.log(err)
+      return;
+    }
     console.log(activities._attributes.summary);
   });
-});
+});*/
