@@ -28,9 +28,10 @@ module.exports = function(jf){
       //ACTIVITY UPDATE AND CREATE
       Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
         if(err) console.log(err)
-        console.log(dateformat(lastActivity.date,"m/dd/yy"))
+        //console.log(lastActivity)
+        //console.log(dateformat(lastActivity.date,"m/dd/yy"))
         if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
-          Activity.update({
+          lastActivity.update({
             steps: activities._attributes.summary.steps,
             activitymin: activities._attributes.summary.fairlyActiveMinutes,
             calories: activities._attributes.summary.caloriesOut

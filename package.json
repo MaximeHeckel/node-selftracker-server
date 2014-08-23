@@ -7,7 +7,8 @@
     "redis": "^0.12.1",
     "jsonfile": "^2.0.0",
     "mongoose": "^3.8.15",
-    "dateformat": "^1.0.8-1.2.3"
+    "dateformat": "^1.0.8-1.2.3",
+    "request": "^2.40.0"
   },
   "devDependencies": {
     "supervisor": "latest"
