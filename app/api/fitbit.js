@@ -1,14 +1,18 @@
 var Fitbit = require('fitbit');
 var Activity = require('../models/activity.js');
+var dateformat = require('dateformat');
 
 module.exports = function(jf){
+
+  var now = new Date();
+
   function readToken(file, callback){
         jf.readFile(file, function(err,obj){
           if(err) callback(err);
           callback(null,obj);
         })
   }
- var date = new Date();
+
   readToken('./token.json',function(err,res){
   var client = new Fitbit(
       '44fde411b9fc4a79a20ad3f50c0961dd'
@@ -21,15 +25,28 @@ module.exports = function(jf){
 
   );
     client.getActivities(function (err, activities) {
-      Activity.create({
-        steps: activities._attributes.summary.steps,
-        activitymin: activities._attributes.summary.fairlyActiveMinutes,
-        calories: activities._attributes.summary.caloriesOut
-      },function(err,Activity){
-        if(err) console.log(err);
+      //ACTIVITY UPDATE AND CREATE
+      Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+        if(err) console.log(err)
+        console.log(dateformat(lastActivity.date,"m/dd/yy"))
+        if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+          Activity.update({
+            steps: activities._attributes.summary.steps,
+            activitymin: activities._attributes.summary.fairlyActiveMinutes,
+            calories: activities._attributes.summary.caloriesOut
+          },function(err,Activity){
+            if(err) console.log(err)
+          });
+        } else {
+          Activity.create({
+            steps: activities._attributes.summary.steps,
+            activitymin: activities._attributes.summary.fairlyActiveMinutes,
+            calories: activities._attributes.summary.caloriesOut
+          },function(err,Activity){
+            if(err) console.log(err);
+          });
+        }
       });
-
-      console.log(activities._attributes.summary);
     });
   });
 }
