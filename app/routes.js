@@ -41,7 +41,7 @@ module.exports = function(app,jf){
     }
   );
 
-  app.get('/status', function(req, res){
+/*  app.get('/status', function(req, res){
     res.send('FB RUNNING')
     var oauth = new OAuth.OAuth(
       'https://api.fitbit.com/oauth/request_token',
@@ -83,70 +83,4 @@ module.exports = function(app,jf){
 
   app.get('/status', function(req,res){
     res.redirect('/');
-  });
-
-  var isLoggedIn = function(req, res, next) {
-    if (req.session.authenticated) {
-      next();
-    } else {
-      res.redirect('/');
-    }
-  };
-}
-
-/*// OAuth flow
-  app.get('/', function (req, res) {
-    // Create an API client and start authentication via OAuth
-    var client = new Fitbit(key, secret);
-
-    client.getRequestToken(function (err, token, tokenSecret) {
-      if (err) {
-        // Take action
-        return;
-      }
-
-      req.session.oauth = {
-          requestToken: token
-        , requestTokenSecret: tokenSecret
-      };
-      res.redirect(client.authorizeUrl(token));
-    });
-  });
-
-  // On return from the authorization
-  app.get('/oauth_callback', function (req, res) {
-    var verifier = req.query.oauth_verifier
-      , oauthSettings = req.session.oauth
-      , client = new Fitbit(key, secret);
-
-    // Request an access token
-    client.getAccessToken(
-        oauthSettings.requestToken
-      , oauthSettings.requestTokenSecret
-      , verifier
-      , function (err, token, secret) {
-          if (err) {
-            // Take action
-            return;
-          }
-
-          oauthSettings.accessToken = token;
-          oauthSettings.accessTokenSecret = secret;
-
-          var cred = {
-            accessToken : token,
-            accessTokenSecret : secret
-          }
-
-          jf.writeFile('./token.json',cred, function(err){
-            if(err) console.log(err);
-          })
-
-          res.redirect('/app');
-        }
-    );
-  });
-
-  app.get('/app', function (req, res) {
-    res.send("App is working")
   });*/
