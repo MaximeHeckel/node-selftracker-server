@@ -1,4 +1,4 @@
-var Fitbit = require('fitbit');
+//var Fitbit = require('fitbit');
 var Activity = require('../models/activity.js');
 var dateformat = require('dateformat');
 
@@ -6,7 +6,7 @@ module.exports = function(jf){
 
 var now = new Date();
 
-function readToken(file, callback){
+/*function readToken(file, callback){
       jf.readFile(file, function(err,obj){
         if(err) callback(err);
         callback(null,obj);
@@ -15,8 +15,8 @@ function readToken(file, callback){
 
 readToken('./token.json',function(err,res){
   var client = new Fitbit(
-      '44fde411b9fc4a79a20ad3f50c0961dd'
-    , 'a306186235724a2fb11d3c5fa82d6eed'
+      '169f5cf6fe9c45a0ac96b92dceaf103f'
+    , 'a2177195b3ca45b1885c2129f21142eb'
     , { // Now set with access tokens
            accessToken: res.accessToken
         , accessTokenSecret: res.accessTokenSecret
@@ -49,5 +49,5 @@ readToken('./token.json',function(err,res){
         }
       });
     });
-  });
+  });*/
 }
