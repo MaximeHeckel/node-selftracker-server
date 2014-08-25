@@ -43,28 +43,28 @@ module.exports = function(app,jf){
   app.get('/status', function(req, res){
     res.send('FB RUNNING')
     var oauth = new OAuth.OAuth(
-    'https://api.fitbit.com/oauth/request_token',
-    'https://api.fitbit.com/oauth/access_token',
-    '169f5cf6fe9c45a0ac96b92dceaf103f',
-    'a2177195b3ca45b1885c2129f21142eb',
-    '1.0',
-    null,
-    'HMAC-SHA1'
-  );
-  oauth.get(
-          'https://api.fitbit.com/1/user/2PQYV6/activities/date/2014-08-25.json',
-          req.accessToken,
-          req.accessSecret,
-          function (err, data, res) {
-            if (err) {
-              console.error("Error fetching activity data. ", err);
-              console.log(err);
-              return;
-            }
+      'https://api.fitbit.com/oauth/request_token',
+      'https://api.fitbit.com/oauth/access_token',
+      '169f5cf6fe9c45a0ac96b92dceaf103f',
+      'a2177195b3ca45b1885c2129f21142eb',
+      '1.0',
+      null,
+      'HMAC-SHA1'
+    );
+    oauth.get(
+      'https://api.fitbit.com/1/user/2PQYV6/activities/date/2014-08-25.json',
+      req.accessToken,
+      req.accessSecret,
+      function (err, data, res) {
+        if (err) {
+          console.error("Error fetching activity data. ", err);
+          console.log(err);
+          return;
+        }
 
-            data = JSON.parse(data);
-            console.log("Fitbit Get Activities", data.summary);
-  })
+        data = JSON.parse(data);
+        console.log("Fitbit Get Activities", data.summary);
+      })
   });
 
   app.get('/fitnessActivities', function (req, res) {
@@ -83,4 +83,12 @@ module.exports = function(app,jf){
   app.get('/status', function(req,res){
     res.redirect('/');
   });
+
+  var isLoggedIn = function(req, res, next) {
+    if (req.session.authenticated) {
+      next();
+    } else {
+      res.redirect('/');
+    }
+  };
 }

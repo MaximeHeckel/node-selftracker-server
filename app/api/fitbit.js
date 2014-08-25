@@ -7,14 +7,6 @@ var request = require('request');
 var FitbitStrategy = require('passport-fitbit').Strategy;
 var OAuth = require('oauth');
 
-var isLoggedIn = function(req, res, next) {
-  if (req.session.authenticated) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-};
-
 passport.use(new FitbitStrategy({
     consumerKey: '169f5cf6fe9c45a0ac96b92dceaf103f',
     consumerSecret: 'a2177195b3ca45b1885c2129f21142eb',
