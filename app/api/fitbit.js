@@ -6,6 +6,7 @@ var passport = require('passport');
 var request = require('request');
 var FitbitStrategy = require('passport-fitbit').Strategy;
 var OAuth = require('oauth');
+var jf = require('jsonfile');
 
 passport.use(new FitbitStrategy({
     consumerKey: '169f5cf6fe9c45a0ac96b92dceaf103f',
@@ -18,6 +19,16 @@ passport.use(new FitbitStrategy({
       if (!profile.access_token) {
         profile.access_token = accessToken;
       }
+
+      var cred = {
+        Token : accessToken,
+        TokenSecret : refreshToken
+      }
+
+      jf.writeFile('./app/api/fitbitToken.json',cred, function(err){
+        if(err) console.log(err);
+      });
+
       return done(null, profile);
     });
   }
