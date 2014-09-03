@@ -80,7 +80,24 @@ module.exports = function(app,jf){
       res.send("RK WORKING")
     });
   });
-  
+
+  app.get('/fitnessActivities/:id', function (req, res) {
+    request.get({
+      uri: RK_URL + '/fitnessActivities/' + req.params.id,
+      headers: {
+        'Accept': 'application/vnd.com.runkeeper.FitnessActivity+json',
+        'Authorization': 'Bearer ' + req.session.passport.user.access_token
+      }
+    }, function (err, resp, body) {
+      try {
+        res.json({ activity: JSON.parse(body) });
+      } catch (err) {
+        res.json({ activity: body.activity });
+      }
+    });
+  });
+
+
   fitbitController.storeData();
   /*app.get('/status', function(req,res){
     res.redirect('/');

@@ -81,7 +81,6 @@ exports.storeData = function(){
                   });
                 }
               });
-              /**/
               /*data = JSON.parse(data);
               console.log("Fitbit Get Activities", data.summary.steps);*/
     });
