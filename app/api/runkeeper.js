@@ -21,9 +21,6 @@ passport.use(new RunkeeperStrategy({
         Token : accessToken,
         TokenSecret : refreshToken
       }
-
-      console.log(accessToken);
-
       jf.writeFile('./app/api/runkeeperToken.json',cred, function(err){
         if(err) console.log(err);
       });

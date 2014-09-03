@@ -41,7 +41,7 @@ module.exports = function(app,jf){
     }
   );
 
-/*  app.get('/status', function(req, res){
+ app.get('/status', function(req, res){
     res.send('FB RUNNING')
     var oauth = new OAuth.OAuth(
       'https://api.fitbit.com/oauth/request_token',
@@ -53,7 +53,7 @@ module.exports = function(app,jf){
       'HMAC-SHA1'
     );
     oauth.get(
-      'https://api.fitbit.com/1/user/2PQYV6/activities/date/2014-08-25.json',
+      'https://api.fitbit.com/1/user/2PQYV6/activities/date/2014-09-03.json',
       req.accessToken,
       req.accessSecret,
       function (err, data, res) {
@@ -76,11 +76,13 @@ module.exports = function(app,jf){
         'Authorization': 'Bearer ' + req.session.passport.user.access_token
       }
     }, function (err, resp, body) {
-      console.log(body);
+      console.log(JSON.parse(body));
       res.send("RK WORKING")
     });
   });
-
-  app.get('/status', function(req,res){
+  
+  fitbitController.storeData();
+  /*app.get('/status', function(req,res){
     res.redirect('/');
   });*/
+};
