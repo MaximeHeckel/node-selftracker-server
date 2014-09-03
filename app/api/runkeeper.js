@@ -28,3 +28,11 @@ passport.use(new RunkeeperStrategy({
     });
   }
 ));
+
+exports.storeDailyActivity = function(){
+
+}
+
+exports.storeLastActivity = function(){
+  
+}

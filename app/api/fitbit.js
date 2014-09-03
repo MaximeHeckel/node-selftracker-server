@@ -62,12 +62,14 @@ exports.storeData = function(){
               }
               data = JSON.parse(data);
               Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
-            if(err) console.log(err);
-            if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+                if(err) console.log(err);
+                if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+                  console.log("Updating")
                   lastActivity.update({
                     steps: data.summary.steps,
                     activitymin: data.summary.fairlyActiveMinutes,
-                    calories: data.summary.caloriesOut
+                    calories: data.summary.caloriesOut,
+                    distance: data.summary.distances[0].distance
                   },function(err,Activity){
                     if(err) console.log(err)
                   });
@@ -75,7 +77,8 @@ exports.storeData = function(){
                   Activity.create({
                     steps: data.summary.steps,
                     activitymin: data.summary.fairlyActiveMinutes,
-                    calories: data.summary.caloriesOut
+                    calories: data.summary.caloriesOut,
+                    distance: data.summary.distances[0].distance
                   },function(err,Activity){
                         if(err) console.log(err);
                   });
