@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Sport = require('../models/sport.js');
+var Activity = require('../models/activity.js');
 var dateformat = require('dateformat');
 var passport = require('passport');
 var request = require('request');
@@ -29,10 +30,28 @@ passport.use(new RunkeeperStrategy({
   }
 ));
 
-exports.storeDailyActivity = function(){
+function readToken(file, callback){
+      jf.readFile(file, function(err,obj){
+        if(err) callback(err);
+        callback(null,obj);
+      })
+}
 
+exports.storeDailyActivity = function(callback){
+  readToken("./app/api/runkeeperToken.json", function(err,res){
+    request.get({
+      uri: RK_URL + '/fitnessActivities',
+      headers: {
+        'Accept': 'application/vnd.com.runkeeper.FitnessActivityFeed+json',
+        'Authorization': 'Bearer ' + res.Token
+      }
+    }, function (err, resp, body) {
+      body = JSON.parse(body);
+      callback(null,body.items[0])
+    });
+  });
 }
 
 exports.storeLastActivity = function(){
-  
+
 }

@@ -7,7 +7,7 @@ var RK_URL = 'https://api.runkeeper.com/';
 
 module.exports = function(app,jf){
 
-  var fitbitController = require('../app/api/fitbit');
+  var activityController = require('../app/api/fitbit');
   var runkeeperController = require('../app/api/runkeeper');
 
   passport.serializeUser(function (user, done) {
@@ -97,9 +97,5 @@ module.exports = function(app,jf){
     });
   });
 
-
-  fitbitController.storeData();
-  /*app.get('/status', function(req,res){
-    res.redirect('/');
-  });*/
+  activityController.storeData();
 };

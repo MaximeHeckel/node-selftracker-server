@@ -6,7 +6,7 @@ var request = require('request');
 var FitbitStrategy = require('passport-fitbit').Strategy;
 var OAuth = require('oauth');
 var jf = require('jsonfile');
-
+var runkeeperController = require('./runkeeper');
 var now = new Date();
 
 passport.use(new FitbitStrategy({
@@ -39,6 +39,11 @@ function readToken(file, callback){
       })
 }
 
+runkeeperController.storeDailyActivity(function(err,res){
+  if(err) console.log(err)
+  console.log(res);
+});
+
 exports.storeData = function(){
   readToken("./app/api/fitbitToken.json",function(err,res){
     var oauth = new OAuth.OAuth(
@@ -51,41 +56,53 @@ exports.storeData = function(){
       'HMAC-SHA1'
     );
     oauth.get(
-            'https://api.fitbit.com/1/user/2PQYV6/activities/date/'+dateformat(now,"yyyy-mm-dd")+'.json',
-            res.Token,
-            res.TokenSecret,
-            function (err, data, res) {
-              if (err) {
-                console.error("Error fetching activity data. ", err);
-                console.log(err);
-                return;
-              }
-              data = JSON.parse(data);
-              Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+    'https://api.fitbit.com/1/user/2PQYV6/activities/date/'+dateformat(now,"yyyy-mm-dd")+'.json',
+    res.Token,
+    res.TokenSecret,
+    function (err, data, res) {
+      if (err) {
+        console.error("Error fetching activity data. ", err);
+        console.log(err);
+        return;
+      }
+
+      data = JSON.parse(data);
+
+      Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+        if(err) console.log(err);
+
+        if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+          console.log("Updating existing entry");
+
+          runkeeperController.storeDailyActivity(function(err,res){
+            if(err) console.log(err)
+
+            lastActivity.update({
+              steps: data.summary.steps,
+              activitymin: data.summary.fairlyActiveMinutes,
+              calories: data.summary.caloriesOut,
+              distance: data.summary.distances[0].distance,
+              rundistance: res.total_distance,
+              duration: res.duration,
+              urilastactivity: res.uri
+            },function(err,Activity){
+              if(err) console.log(err)
+            });
+          });
+        }
+
+        else {
+          console.log("Creating new entry")
+          Activity.create({
+            steps: data.summary.steps,
+            activitymin: data.summary.fairlyActiveMinutes,
+            calories: data.summary.caloriesOut,
+            distance: data.summary.distances[0].distance
+          },function(err,Activity){
                 if(err) console.log(err);
-                if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
-                  console.log("Updating")
-                  lastActivity.update({
-                    steps: data.summary.steps,
-                    activitymin: data.summary.fairlyActiveMinutes,
-                    calories: data.summary.caloriesOut,
-                    distance: data.summary.distances[0].distance
-                  },function(err,Activity){
-                    if(err) console.log(err)
-                  });
-                } else {
-                  Activity.create({
-                    steps: data.summary.steps,
-                    activitymin: data.summary.fairlyActiveMinutes,
-                    calories: data.summary.caloriesOut,
-                    distance: data.summary.distances[0].distance
-                  },function(err,Activity){
-                        if(err) console.log(err);
-                  });
-                }
-              });
-              /*data = JSON.parse(data);
-              console.log("Fitbit Get Activities", data.summary.steps);*/
+          });
+        }
+      });
     });
   });
 };
