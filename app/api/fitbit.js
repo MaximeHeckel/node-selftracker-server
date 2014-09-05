@@ -39,11 +39,6 @@ function readToken(file, callback){
       })
 }
 
-runkeeperController.storeDailyActivity(function(err,res){
-  if(err) console.log(err)
-  console.log(res);
-});
-
 exports.storeData = function(){
   readToken("./app/api/fitbitToken.json",function(err,res){
     var oauth = new OAuth.OAuth(

@@ -3,7 +3,12 @@ var RunkeeperStrategy = require('passport-runkeeper').Strategy;
 var OAuth = require('oauth');
 var passport = require('passport');
 var request = require('request');
+var schedule = require('node-schedule');
 var RK_URL = 'https://api.runkeeper.com/';
+
+var rule = new schedule.RecurrenceRule();
+
+rule.minute = 2;
 
 module.exports = function(app,jf){
 
@@ -96,6 +101,8 @@ module.exports = function(app,jf){
       }
     });
   });
-
-  activityController.storeData();
+  var j = schedule.scheduleJob(rule, function(){
+    console.log("SCHEDULE UPDATE");
+    activityController.storeData();
+  });
 };
