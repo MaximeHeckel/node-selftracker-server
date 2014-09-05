@@ -41,6 +41,7 @@ function readToken(file, callback){
 
 exports.storeDailyActivity = function(){
   readToken("./app/api/fitbitToken.json",function(err,res){
+
     var oauth = new OAuth.OAuth(
       'https://api.fitbit.com/oauth/request_token',
       'https://api.fitbit.com/oauth/access_token',
@@ -50,6 +51,7 @@ exports.storeDailyActivity = function(){
       null,
       'HMAC-SHA1'
     );
+
     oauth.get(
     'https://api.fitbit.com/1/user/2PQYV6/activities/date/'+dateformat(now,"yyyy-mm-dd")+'.json',
     res.Token,
@@ -67,26 +69,29 @@ exports.storeDailyActivity = function(){
         if(err) console.log(err);
 
         if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
-          console.log("Updating existing entry");
+
+          console.log("["+now+"]: Updating existing entry");
 
           runkeeperController.storeDailyRun(function(err,res){
             if(err) console.log(err)
             var rundate = new Date(res.start_time);
-            if(dateformat(now,"m/dd/yy")==dateformat(rundate("m/dd/yy"))){
-            lastActivity.update({
-              steps: data.summary.steps,
-              activitymin: data.summary.fairlyActiveMinutes,
-              calories: data.summary.caloriesOut,
-              distance: data.summary.distances[0].distance,
-              rundistance: res.total_distance,
-              duration: res.duration,
-              urilastactivity: res.uri
-            },function(err,Activity){
-              if(err) console.log(err)
+            if(dateformat(now,"m/dd/yy")==dateformat(rundate,"m/dd/yy")){
+              console.log("One Run today")
+              lastActivity.update({
+                steps: data.summary.steps,
+                activitymin: data.summary.fairlyActiveMinutes,
+                calories: data.summary.caloriesOut,
+                distance: data.summary.distances[0].distance,
+                rundistance: res.total_distance,
+                duration: res.duration,
+                urilastactivity: res.uri
+              },function(err,Activity){
+                  if(err) console.log(err)
             });
           }
 
           else{
+            console.log("No Run today")
             lastActivity.update({
               steps: data.summary.steps,
               activitymin: data.summary.fairlyActiveMinutes,
@@ -100,7 +105,9 @@ exports.storeDailyActivity = function(){
         }
 
         else {
-          console.log("Creating new entry")
+
+          console.log("["+now+"]: Creating new entry")
+
           Activity.create({
             steps: data.summary.steps,
             activitymin: data.summary.fairlyActiveMinutes,

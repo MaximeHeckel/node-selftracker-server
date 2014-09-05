@@ -39,6 +39,7 @@ function readToken(file, callback){
 
 exports.storeDailyRun = function(callback){
   readToken("./app/api/runkeeperToken.json", function(err,res){
+
     request.get({
       uri: RK_URL + '/fitnessActivities',
       headers: {
