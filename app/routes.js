@@ -78,4 +78,6 @@ module.exports = function(app,jf){
     console.log("Time for an update");
     activityController.storeDailyActivity();
   });
+
+  runkeeperController.storeLastRun()
 };

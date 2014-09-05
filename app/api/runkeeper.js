@@ -7,6 +7,7 @@ var request = require('request');
 var RunkeeperStrategy = require('passport-runkeeper').Strategy;
 var jf = require('jsonfile');
 var credentials = require('../../config/credentials.js');
+var now = new Date();
 var RK_URL = 'https://api.runkeeper.com/';
 
 passport.use(new RunkeeperStrategy({
@@ -55,5 +56,9 @@ exports.storeDailyRun = function(callback){
 }
 
 exports.storeLastRun = function(){
-
+  console.log("storing last run");
+  Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+    if(err) console.log(err)
+    console.log(lastActivity);
+  });
 }
