@@ -39,7 +39,7 @@ function readToken(file, callback){
       })
 }
 
-exports.storeData = function(){
+exports.storeDailyActivity = function(){
   readToken("./app/api/fitbitToken.json",function(err,res){
     var oauth = new OAuth.OAuth(
       'https://api.fitbit.com/oauth/request_token',
@@ -69,9 +69,10 @@ exports.storeData = function(){
         if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
           console.log("Updating existing entry");
 
-          runkeeperController.storeDailyActivity(function(err,res){
+          runkeeperController.storeDailyRun(function(err,res){
             if(err) console.log(err)
-
+            var rundate = new Date(res.start_time);
+            if(dateformat(now,"m/dd/yy")==dateformat(rundate("m/dd/yy"))){
             lastActivity.update({
               steps: data.summary.steps,
               activitymin: data.summary.fairlyActiveMinutes,
@@ -83,6 +84,18 @@ exports.storeData = function(){
             },function(err,Activity){
               if(err) console.log(err)
             });
+          }
+
+          else{
+            lastActivity.update({
+              steps: data.summary.steps,
+              activitymin: data.summary.fairlyActiveMinutes,
+              calories: data.summary.caloriesOut,
+              distance: data.summary.distances[0].distance
+            },function(err,Activity){
+              if(err) console.log(err)
+            });
+          }
           });
         }
 

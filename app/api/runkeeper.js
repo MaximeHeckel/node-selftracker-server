@@ -37,7 +37,7 @@ function readToken(file, callback){
       })
 }
 
-exports.storeDailyActivity = function(callback){
+exports.storeDailyRun = function(callback){
   readToken("./app/api/runkeeperToken.json", function(err,res){
     request.get({
       uri: RK_URL + '/fitnessActivities',
@@ -52,6 +52,6 @@ exports.storeDailyActivity = function(callback){
   });
 }
 
-exports.storeLastActivity = function(){
+exports.storeLastRun = function(){
 
 }

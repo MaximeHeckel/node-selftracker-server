@@ -102,7 +102,7 @@ module.exports = function(app,jf){
     });
   });
   var j = schedule.scheduleJob(rule, function(){
-    console.log("SCHEDULE UPDATE");
-    activityController.storeData();
+    console.log("Time for an update");
+    activityController.storeDailyActivity();
   });
 };
