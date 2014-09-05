@@ -58,16 +58,23 @@ exports.storeDailyRun = function(callback){
 exports.storeLastRun = function(){
   console.log("Storing last run");
   readToken("./app/api/runkeeperToken.json", function(err,res){
-
+    Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+      if(err) console.log(err);
     request.get({
-      uri: 'http://127.0.0.1:3000/fitnessActivities/427625271',
+      uri: 'http://127.0.0.1:3000'+lastActivity.urilastactivity,
       headers: {
         'Accept': 'application/vnd.com.runkeeper.FitnessActivityFeed+json',
         'Authorization': 'Bearer ' + res.Token
       }
     }, function (err, resp, body) {
       body = JSON.parse(body);
-      console.log(body.activity.climb);
+      var data = body.activity
+      console.log(data);
+
+      /*Sport.create({
+
+      });*/
     });
   });
+});
 }
