@@ -46,10 +46,6 @@ module.exports = function(app,jf){
     }
   );
 
- app.get('/status', function(req, res){
-    res.send('FB RUNNING')
-});
-
   app.get('/fitnessActivities', function (req, res) {
     request.get({
       uri: RK_URL + '/fitnessActivities',
@@ -78,8 +74,8 @@ module.exports = function(app,jf){
       }
     });
   });
-  //var j = schedule.scheduleJob(rule, function(){
+  var j = schedule.scheduleJob(rule, function(){
     console.log("Time for an update");
     activityController.storeDailyActivity();
-  //});
+  });
 };
