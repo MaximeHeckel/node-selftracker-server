@@ -7,11 +7,12 @@ var FitbitStrategy = require('passport-fitbit').Strategy;
 var OAuth = require('oauth');
 var jf = require('jsonfile');
 var runkeeperController = require('./runkeeper');
+var credentials = require('../../config/credentials.js');
 var now = new Date();
 
 passport.use(new FitbitStrategy({
-    consumerKey: '169f5cf6fe9c45a0ac96b92dceaf103f',
-    consumerSecret: 'a2177195b3ca45b1885c2129f21142eb',
+    consumerKey: credentials.fitbitClientID,
+    consumerSecret: credentials.fitbitClientSecret,
     callbackURL: "http://127.0.0.1:3000/auth/fitbit/callback"
   },
   function(accessToken, refreshToken, profile, done) {
@@ -45,8 +46,8 @@ exports.storeDailyActivity = function(){
     var oauth = new OAuth.OAuth(
       'https://api.fitbit.com/oauth/request_token',
       'https://api.fitbit.com/oauth/access_token',
-      '169f5cf6fe9c45a0ac96b92dceaf103f',
-      'a2177195b3ca45b1885c2129f21142eb',
+      credentials.fitbitClientID,
+      credentials.fitbitClientSecret,
       '1.0',
       null,
       'HMAC-SHA1'
