@@ -8,12 +8,19 @@ var RK_URL = 'https://api.runkeeper.com/';
 
 var rule = new schedule.RecurrenceRule();
 
-rule.minute = 2;
+rule.minute = 42;
 
 module.exports = function(app,jf){
 
   var activityController = require('../app/api/fitbit');
   var runkeeperController = require('../app/api/runkeeper');
+
+  function readToken(file, callback){
+        jf.readFile(file, function(err,obj){
+          if(err) callback(err);
+          callback(null,obj);
+        })
+  }
 
   passport.serializeUser(function (user, done) {
     done(null, user);
@@ -60,11 +67,12 @@ module.exports = function(app,jf){
   });
 
   app.get('/fitnessActivities/:id', function (req, res) {
+    readToken("./app/api/runkeeperToken.json", function(err,file){
     request.get({
       uri: RK_URL + '/fitnessActivities/' + req.params.id,
       headers: {
         'Accept': 'application/vnd.com.runkeeper.FitnessActivity+json',
-        'Authorization': 'Bearer ' + req.session.passport.user.access_token
+        'Authorization': 'Bearer ' + file.Token
       }
     }, function (err, resp, body) {
       try {
@@ -73,6 +81,7 @@ module.exports = function(app,jf){
         res.json({ activity: body.activity });
       }
     });
+  });
   });
   var j = schedule.scheduleJob(rule, function(){
     console.log("Time for an update");
