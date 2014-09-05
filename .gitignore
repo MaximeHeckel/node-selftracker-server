@@ -1,1 +1,3 @@
 node_modules
+app/api/fitbitToken.json
+app/api/runkeeperToken.json
