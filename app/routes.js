@@ -9,10 +9,10 @@ var RK_URL = 'https://api.runkeeper.com/';
 var rule1 = new schedule.RecurrenceRule();
 var rule2 = new schedule.RecurrenceRule();
 
-rule1.minute = 5; //Will update 30 minutes after the next hour
-rule2.minute = 10; //Will update 35 minutes after the next hour
+rule1.minute = 50; //Will update 50 minutes after the next hour
+rule2.minute = 55; //Will update 55 minutes after the next hour
 
-module.exports = function(app,jf){
+module.exports = function(app,jf,port){
 
   var activityController = require('../app/api/fitbit');
   var runkeeperController = require('../app/api/runkeeper');
@@ -88,21 +88,11 @@ module.exports = function(app,jf){
 
   var job1 = schedule.scheduleJob(rule1, function(){
     console.log("[ACTIVITY]: Time for an update");
-    activityController.storeDailyActivity();
+    activityController.storeDailyActivity(port);
   });
 
   var job2 = schedule.scheduleJob(rule2, function(){
     console.log("[RUN]: Time for an update");
-    runkeeperController.storeLastRun()
+    runkeeperController.storeLastRun(port)
   });
-
-  /*readToken("./config/config.json", function(err,content){
-    if(content.Ready!="True"){
-    jf.writeFile("./config/config.json", {"Ready": "True"}, function(err,res){
-      if(err) console.log(err);
-    })
-  } else{
-    console.log("App is Ready")
-  }
-})*/
 };

@@ -1,10 +1,10 @@
 var express = require('express')
-  , app = express()
-  , jf = require('jsonfile')
+  , app      = express()
+  , jf       = require('jsonfile')
   , mongoose = require('mongoose')
-  , database = require('./config/database');
-
-var passport = require('passport');
+  , database = require('./config/database')
+  , port     = process.env.PORT || 3000
+  , passport = require('passport');
 
 //Configuration
 mongoose.connect(database.url)
@@ -16,7 +16,7 @@ app.configure(function(){
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.listen(3000); //NEED TO CHANGE THAT FOR PRODUCTION
+  app.listen(port); //NEED TO CHANGE THAT FOR PRODUCTION
 });
 
-require('./app/routes.js')(app, jf);
+require('./app/routes.js')(app, jf, port);

@@ -9,11 +9,12 @@ var jf = require('jsonfile');
 var runkeeperController = require('./runkeeper');
 var credentials = require('../../config/credentials.js');
 var now = new Date();
+var port = process.env.PORT || 3000;
 
 passport.use(new FitbitStrategy({
     consumerKey: credentials.fitbitClientID,
     consumerSecret: credentials.fitbitClientSecret,
-    callbackURL: "http://127.0.0.1:3000/auth/fitbit/callback"
+    callbackURL: credentials.host+port+'/auth/fitbit/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
@@ -65,7 +66,7 @@ exports.storeDailyActivity = function(){
       }
 
       data = JSON.parse(data);
-      
+
       Activity.count(function(err,count){
         if(count == 0){
           Activity.create({
