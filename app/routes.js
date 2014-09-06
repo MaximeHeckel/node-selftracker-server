@@ -12,7 +12,7 @@ var rule2 = new schedule.RecurrenceRule();
 rule1.minute = 50; //Will update 50 minutes after the next hour
 rule2.minute = 55; //Will update 55 minutes after the next hour
 
-module.exports = function(app,jf,port,auth){
+module.exports = function(app,jf,auth){
 
   var activityController = require('../app/api/fitbit');
   var runkeeperController = require('../app/api/runkeeper');
@@ -88,11 +88,11 @@ module.exports = function(app,jf,port,auth){
 
   var job1 = schedule.scheduleJob(rule1, function(){
     console.log("[ACTIVITY]: Time for an update");
-    activityController.storeDailyActivity(port);
+    activityController.storeDailyActivity();
   });
 
   var job2 = schedule.scheduleJob(rule2, function(){
     console.log("[RUN]: Time for an update");
-    runkeeperController.storeLastRun(port)
+    runkeeperController.storeLastRun()
   });
 };

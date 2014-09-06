@@ -22,4 +22,4 @@ app.configure(function(){
 
 app.listen(port); //NEED TO CHANGE THAT FOR PRODUCTION
 
-require('./app/routes.js')(app, jf, port, auth);
+require('./app/routes.js')(app, jf, auth);

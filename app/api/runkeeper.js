@@ -56,7 +56,7 @@ exports.storeDailyRun = function(callback){
   });
 }
 
-exports.storeLastRun = function(port){
+exports.storeLastRun = function(){
   console.log("["+new Date()+"]: Storing last run");
   readToken("./app/api/runkeeperToken.json", function(err,res){
     Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){

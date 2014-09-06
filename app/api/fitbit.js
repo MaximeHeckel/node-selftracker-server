@@ -9,7 +9,6 @@ var jf = require('jsonfile');
 var runkeeperController = require('./runkeeper');
 var credentials = require('../../config/credentials.js');
 var now = new Date();
-var port = process.env.PORT || 3000;
 
 passport.use(new FitbitStrategy({
     consumerKey: credentials.fitbitClientID,
