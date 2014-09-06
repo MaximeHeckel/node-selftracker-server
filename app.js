@@ -4,7 +4,8 @@ var express = require('express')
   , mongoose = require('mongoose')
   , database = require('./config/database')
   , port     = process.env.PORT || 3000
-  , auth     = express.basicAuth('admin', 'admin')
+  , credentials = require('./config/credentials.js')
+  , auth     = express.basicAuth(credentials.account, credentials.password)
   , passport = require('passport');
 
 //Configuration
