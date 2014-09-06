@@ -66,7 +66,7 @@ exports.storeLastRun = function(port){
           if(dateformat(lastRun.date,"m/dd/yy")!=dateformat(now,"m/dd/yy")){
             console.log("Creating new Run")
         request.get({
-          uri: credentials.host+port+lastActivity.urilastactivity, //Need to change that ( doesn't work if we call directly the Runkeeper API ??)
+          uri: credentials.host+":"+port+lastActivity.urilastactivity, //Need to change that ( doesn't work if we call directly the Runkeeper API ??)
           headers: {
             'Accept': 'application/vnd.com.runkeeper.FitnessActivityFeed+json',
             'Authorization': 'Bearer ' + res.Token
