@@ -71,7 +71,7 @@ exports.storeDailyActivity = function(){
 
         if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
 
-          console.log("["+now+"]: Updating existing entry");
+          console.log("["+new Date()+"]: Updating existing entry");
 
           runkeeperController.storeDailyRun(function(err,res){
             if(err) console.log(err)
@@ -107,7 +107,7 @@ exports.storeDailyActivity = function(){
 
         else {
 
-          console.log("["+now+"]: Creating new entry")
+          console.log("["+new Date()+"]: Creating new entry")
 
           Activity.create({
             steps: data.summary.steps,

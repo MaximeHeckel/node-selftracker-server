@@ -56,25 +56,41 @@ exports.storeDailyRun = function(callback){
 }
 
 exports.storeLastRun = function(){
-  console.log("Storing last run");
+  console.log("["+new Date()+"]: Storing last run");
   readToken("./app/api/runkeeperToken.json", function(err,res){
     Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
       if(err) console.log(err);
-    request.get({
-      uri: 'http://127.0.0.1:3000'+lastActivity.urilastactivity,
-      headers: {
-        'Accept': 'application/vnd.com.runkeeper.FitnessActivityFeed+json',
-        'Authorization': 'Bearer ' + res.Token
+      if(lastActivity.urilastactivity!=""){
+        Sport.findOne({},{}, {sort:{'date': -1}}, function(err,lastRun){
+          if(dateformat(lastRun.date,"m/dd/yy")!=dateformat(now,"m/dd/yy")){
+            console.log("Creating new Run")
+        request.get({
+          uri: 'http://127.0.0.1:3000'+lastActivity.urilastactivity, //Need to change that ( doesn't work if we call directly the Runkeeper API ??)
+          headers: {
+            'Accept': 'application/vnd.com.runkeeper.FitnessActivityFeed+json',
+            'Authorization': 'Bearer ' + res.Token
+          }
+        }, function (err, resp, body) {
+              body = JSON.parse(body);
+              var data = body.activity
+              Sport.create({
+                  climb: data.climb,
+                  type: data.type,
+                  distance: data.total_distance,
+                  path: data.path,
+                  calories: data.total_calories,
+                  duration: data.duration
+              },function(err,Sport){
+                if(err) console.log(err)
+              });
+            });
+          }
+
+          else {
+            console.log("No Run update needed")
+          }
+        });
       }
-    }, function (err, resp, body) {
-      body = JSON.parse(body);
-      var data = body.activity
-      console.log(data);
-
-      /*Sport.create({
-
-      });*/
     });
   });
-});
 }

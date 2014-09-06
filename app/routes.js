@@ -6,9 +6,11 @@ var request = require('request');
 var schedule = require('node-schedule');
 var RK_URL = 'https://api.runkeeper.com/';
 
-var rule = new schedule.RecurrenceRule();
+var rule1 = new schedule.RecurrenceRule();
+var rule2 = new schedule.RecurrenceRule();
 
-rule.minute = 42;
+rule1.minute = 30;
+rule2.minute = 35;
 
 module.exports = function(app,jf){
 
@@ -79,14 +81,18 @@ module.exports = function(app,jf){
         res.json({ activity: JSON.parse(body) });
       } catch (err) {
         res.json({ activity: body.activity });
-      }
+        }
+      });
     });
   });
-  });
-  var j = schedule.scheduleJob(rule, function(){
-    console.log("Time for an update");
+
+  var job1 = schedule.scheduleJob(rule1, function(){
+    console.log("[ACTIVITY]: Time for an update");
     activityController.storeDailyActivity();
   });
 
-  runkeeperController.storeLastRun()
+  var job2 = schedule.scheduleJob(rule2, function(){
+    console.log("[RUN]: Time for an update");
+    runkeeperController.storeLastRun()
+  });
 };
