@@ -14,7 +14,7 @@ var RK_URL = 'https://api.runkeeper.com/';
 passport.use(new RunkeeperStrategy({
     clientID: credentials.runkeeperClientID ,
     clientSecret: credentials.runkeeperClientSecret,
-    callbackURL: credentials.host+port+'/auth/runkeeper/callback'
+    callbackURL: credentials.host+":"+port+'/auth/runkeeper/callback'
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function (err) {
