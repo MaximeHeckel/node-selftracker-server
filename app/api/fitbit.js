@@ -65,50 +65,9 @@ exports.storeDailyActivity = function(){
       }
 
       data = JSON.parse(data);
-
-      Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
-        if(err) console.log(err);
-
-        if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
-
-          console.log("["+new Date()+"]: Updating existing entry");
-
-          runkeeperController.storeDailyRun(function(err,res){
-            if(err) console.log(err)
-            var rundate = new Date(res.start_time);
-            if(dateformat(now,"m/dd/yy")==dateformat(rundate,"m/dd/yy")){
-              console.log("One Run today")
-              lastActivity.update({
-                steps: data.summary.steps,
-                activitymin: data.summary.fairlyActiveMinutes,
-                calories: data.summary.caloriesOut,
-                distance: data.summary.distances[0].distance,
-                rundistance: res.total_distance,
-                duration: res.duration,
-                urilastactivity: res.uri
-              },function(err,Activity){
-                  if(err) console.log(err)
-            });
-          }
-
-          else{
-            console.log("No Run today")
-            lastActivity.update({
-              steps: data.summary.steps,
-              activitymin: data.summary.fairlyActiveMinutes,
-              calories: data.summary.caloriesOut,
-              distance: data.summary.distances[0].distance
-            },function(err,Activity){
-              if(err) console.log(err)
-            });
-          }
-          });
-        }
-
-        else {
-
-          console.log("["+new Date()+"]: Creating new entry")
-
+      
+      Activity.count(function(err,count){
+        if(count == 0){
           Activity.create({
             steps: data.summary.steps,
             activitymin: data.summary.fairlyActiveMinutes,
@@ -116,6 +75,63 @@ exports.storeDailyActivity = function(){
             distance: data.summary.distances[0].distance
           },function(err,Activity){
                 if(err) console.log(err);
+          });
+        }
+
+        else {
+
+          Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
+            if(err) console.log(err);
+
+            if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+
+              console.log("["+new Date()+"]: Updating existing entry");
+
+              runkeeperController.storeDailyRun(function(err,res){
+                if(err) console.log(err)
+                var rundate = new Date(res.start_time);
+                if(dateformat(now,"m/dd/yy")==dateformat(rundate,"m/dd/yy")){
+                  console.log("One Run today")
+                  lastActivity.update({
+                    steps: data.summary.steps,
+                    activitymin: data.summary.fairlyActiveMinutes,
+                    calories: data.summary.caloriesOut,
+                    distance: data.summary.distances[0].distance,
+                    rundistance: res.total_distance,
+                    duration: res.duration,
+                    urilastactivity: res.uri
+                  },function(err,Activity){
+                      if(err) console.log(err)
+                });
+              }
+
+              else{
+                console.log("No Run today")
+                lastActivity.update({
+                  steps: data.summary.steps,
+                  activitymin: data.summary.fairlyActiveMinutes,
+                  calories: data.summary.caloriesOut,
+                  distance: data.summary.distances[0].distance
+                },function(err,Activity){
+                  if(err) console.log(err)
+                });
+              }
+              });
+            }
+
+            else {
+
+              console.log("["+new Date()+"]: Creating new entry")
+
+              Activity.create({
+                steps: data.summary.steps,
+                activitymin: data.summary.fairlyActiveMinutes,
+                calories: data.summary.caloriesOut,
+                distance: data.summary.distances[0].distance
+              },function(err,Activity){
+                    if(err) console.log(err);
+              });
+            }
           });
         }
       });
