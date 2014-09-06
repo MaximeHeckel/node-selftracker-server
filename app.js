@@ -4,6 +4,7 @@ var express = require('express')
   , mongoose = require('mongoose')
   , database = require('./config/database')
   , port     = process.env.PORT || 3000
+  , auth     = express.basicAuth('admin', 'admin')
   , passport = require('passport');
 
 //Configuration
@@ -16,7 +17,8 @@ app.configure(function(){
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.listen(port); //NEED TO CHANGE THAT FOR PRODUCTION
 });
 
-require('./app/routes.js')(app, jf, port);
+app.listen(port); //NEED TO CHANGE THAT FOR PRODUCTION
+
+require('./app/routes.js')(app, jf, port, auth);
