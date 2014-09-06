@@ -14,7 +14,7 @@ var port = process.env.PORT || 3000;
 passport.use(new FitbitStrategy({
     consumerKey: credentials.fitbitClientID,
     consumerSecret: credentials.fitbitClientSecret,
-    callbackURL: credentials.host+":"+port+'/auth/fitbit/callback'
+    callbackURL: credentials.host+'/auth/fitbit/callback'
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
