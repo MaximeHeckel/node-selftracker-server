@@ -83,14 +83,14 @@ exports.storeDailyActivity = function(){
           Activity.findOne({},{}, {sort:{'date': -1}}, function(err,lastActivity){
             if(err) console.log(err);
 
-            if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(now,"m/dd/yy")){
+            if(dateformat(lastActivity.date,"m/dd/yy")==dateformat(new Date(),"m/dd/yy")){
 
               console.log("["+new Date()+"]: Updating existing entry");
 
               runkeeperController.storeDailyRun(function(err,res){
                 if(err) console.log(err)
                 var rundate = new Date(res.start_time);
-                if(dateformat(now,"m/dd/yy")==dateformat(rundate,"m/dd/yy")){
+                if(dateformat(new Date(),"m/dd/yy")==dateformat(rundate,"m/dd/yy")){
                   console.log("One Run today")
                   lastActivity.update({
                     steps: data.summary.steps,
