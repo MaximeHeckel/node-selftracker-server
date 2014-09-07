@@ -63,7 +63,7 @@ exports.storeLastRun = function(){
       if(err) console.log(err);
       if(lastActivity.urilastactivity!=""){
         Sport.findOne({},{}, {sort:{'date': -1}}, function(err,lastRun){
-          if(dateformat(lastRun.date,"m/dd/yy")!=dateformat(now,"m/dd/yy")){
+          if(dateformat(lastRun.date,"m/dd/yy")!=dateformat(new Date(),"m/dd/yy")){
             console.log("Creating new Run")
         request.get({
           uri: credentials.host+lastActivity.urilastactivity, //Need to change that ( doesn't work if we call directly the Runkeeper API ??)
