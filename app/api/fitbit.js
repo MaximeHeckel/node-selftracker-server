@@ -8,7 +8,6 @@ var OAuth = require('oauth');
 var jf = require('jsonfile');
 var runkeeperController = require('./runkeeper');
 var credentials = require('../../config/credentials.js');
-var now = new Date();
 
 passport.use(new FitbitStrategy({
     consumerKey: credentials.fitbitClientID,
@@ -54,7 +53,7 @@ exports.storeDailyActivity = function(){
     );
 
     oauth.get(
-    'https://api.fitbit.com/1/user/2PQYV6/activities/date/'+dateformat(now,"yyyy-mm-dd")+'.json',
+    'https://api.fitbit.com/1/user/2PQYV6/activities/date/'+dateformat(new Date(),"yyyy-mm-dd")+'.json',
     res.Token,
     res.TokenSecret,
     function (err, data, res) {

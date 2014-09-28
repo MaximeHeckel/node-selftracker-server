@@ -7,7 +7,6 @@ var request = require('request');
 var RunkeeperStrategy = require('passport-runkeeper').Strategy;
 var jf = require('jsonfile');
 var credentials = require('../../config/credentials.js');
-var now = new Date();
 var port = process.env.PORT || 3000;
 var RK_URL = 'https://api.runkeeper.com/';
 
